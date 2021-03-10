@@ -571,7 +571,7 @@ static triChar* _triImageLoadPngStream( stream* s, triImage *img )
 		case PNG_COLOR_TYPE_GRAY:
 			img->format = IMG_FORMAT_T8;
 			img->bits = 8;
-			if (bit_depth<8) png_set_gray_1_2_4_to_8(png_ptr);
+			if (bit_depth<8) png_set_expand_gray_1_2_4_to_8(png_ptr);
 			img->palette = triMalloc(256*4);
 			img->palformat = IMG_FORMAT_8888;
 			if (img->palette==0)
