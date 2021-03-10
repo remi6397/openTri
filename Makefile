@@ -1,7 +1,7 @@
 TARGET_LIB = libtri.a
 OBJS = streams/streams.o triArchive.o triTexman.o triCamera.o triVAlloc.o triMemory.o triRefcount.o triImage.o rle.o triGraphics.o tri3d.o triLog.o triModel.o triInput.o triVMath_vfpu.o triTimer.o triWav.o triAt3.o triAudioLib.o triError.o triConsole.o triFont.o triHeap.o triNet.o triParticle.o
 
-INCDIR = 
+INCDIR =
 CFLAGS = -O3 -G0 -Wall -D__PSP__
 CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
 ASFLAGS = $(CFLAGS)
@@ -25,24 +25,18 @@ ifeq ($(FT),1)
 	LDFLAGS += -lfreetype $(shell $(PSPBIN)/bin/freetype-config --libs)
 endif
 
-PSPSDK=$(shell psp-config --pspsdk-path)
+PSPSDK = $(shell psp-config --pspsdk-path)
 PSPDIR = $(shell psp-config --psp-prefix)
 include $(PSPSDK)/lib/build.mak
 
 release: clean install
 
 install: $(TARGET_LIB)
-	@echo Installing libtri to "$(PSPDIR)/lib"
-	@$(CP) libtri.a $(PSPDIR)/lib
-	@echo Installing headers to "$(PSPDIR)/include/openTri"
-	@$(MKDIR) -p $(PSPDIR)/include/openTri
-	@$(CP) *.h $(PSPDIR)/include/openTri
-	@echo Installing headers to "$(PSPDIR)/include/streams"
-	@$(MKDIR) -p $(PSPDIR)/include/streams
-	@$(CP) streams/*.h $(PSPDIR)/include/streams
-	@$(CP) streams/*.inc $(PSPDIR)/include/streams
-	@echo Installing documentation to "$(PSPDIR)/share/doc/openTri"
-	@$(MKDIR) -p $(PSPDIR)/share/doc/openTri
-	@$(DOXYGEN) doxygen.ini
-	@$(CP) -r doc/* $(PSPDIR)/share/doc/openTri
-	@echo Done.
+	install -m 755 -t $(PSPDIR)/lib $<
+	install -m 644 -t $(PSPDIR)/include/openTri *.h
+	install -m 644 -t $(PSPDIR)/include/streams streams/*.h
+	install -m 644 -t $(PSPDIR)/include/streams streams/*.inc
+	doxygen doxygen.ini
+	install -t $(PSPDIR)/share/doc/openTri/html doc/html/*
+
+.PHONY: install
